@@ -13,7 +13,9 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
     "express": "^4.14.0",
+    "fabric": "^1.6.5",
     "leapjs": "^0.6.4",
+    "lodash": "^4.16.4",
     "watchify": "^3.7.0"
   },
   "devDependencies": {
