@@ -2,8 +2,9 @@ const express = require('express');
 
 const app = express();
 
-app.use('/', express.static('src/html'));
 app.use('/bundled', express.static('bundled'));
+app.use('/wires', express.static('src/wires'));
+app.use('/', express.static('src/html'));
 
 app.listen(3000, (err) => {
   if (!err) {
