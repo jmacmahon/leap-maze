@@ -49,9 +49,13 @@ loop((frame) => {
 var imD = new ImageData;
 var x = new int 0;
 var z = new int 0;
-var cxt = circ.getContext("2d");
 const h = circ.getHeight();
 const w = circ.getWidth();
+
+var bg = document.getElementById('wireA.jpg');
+var wire = new fabric.Image(bg, {left: 0, top: 0, angle: 0, opacity: 1});
+canvas.add(wire);
+var cxt = canvas.getContext('2d');
 
 const black = new Color().rbg(1, 1, 1);
 const red = new Color().rbg(255, 0, 0);
@@ -59,7 +63,6 @@ const orange = new Color().rbg(255, 158, 0);
 
   loop((frame)) => {
     const xz = getXZ(frame);
-    var cxt = circ.getContext("2d");
     x = xz[0];
     z = xz[1];
     imD = cxt.getImageData(x, z, w, h);
