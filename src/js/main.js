@@ -45,3 +45,33 @@ loop((frame) => {
   }
   canvas.renderAll();
 });
+
+var imD = new ImageData;
+var x = new int 0;
+var z = new int 0;
+var cxt = circ.getContext("2d");
+const h = circ.getHeight();
+const w = circ.getWidth();
+
+const black = new Color().rbg(1, 1, 1);
+const red = new Color().rbg(255, 0, 0);
+const orange = new Color().rbg(255, 158, 0);
+
+  loop((frame)) => {
+    const xz = getXZ(frame);
+    var cxt = circ.getContext("2d");
+    x = xz[0];
+    z = xz[1];
+    imD = cxt.getImageData(x, z, w, h);
+    var onColor = Color().rbg(imD.data[0], imD.data[1], imD.data[2]);
+    if(onColor.red() === black.red() && onColor.green() === black.green() && onColor.blue() === black.blue()){
+      document.getElementById('test').innerHTML = 'good';
+    } elseif(onColor.red() === red.red() && onColor.green() === red.green() && onColor.blue() === red.blue()){
+      document.getElementById('test').innerHTML = 'bad';
+    } elseif(onColor.red() === orange.red() && onColor.green() === orange.green() && onColor.blue() === orange.blue()){
+      document.getElementById('test').innerHTML = 'okay';
+    } else {
+      document.getElementById('test').innerHTML = 'error';
+    }
+
+  }
