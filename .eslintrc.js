@@ -7,4 +7,7 @@ module.exports = {
       "no-unused-vars": "warn",
       "no-param-reassign": ["error", { "props": false }],
     },
+    "env": {
+      "browser": true,
+    }
 };
