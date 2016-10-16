@@ -58,17 +58,6 @@ loop((frame) => {
     circ.setTop(z);
     const imD = cxt.getImageData(x - 10, z - 10, 1, 1);
     const color = [imD.data[0], imD.data[1], imD.data[2]];
-    console.log(color);
-    console.log(z, x);
-    // if (color[0] === 0 && color[1] === 0 && color[2] === 0) {
-    //   document.getElementById('test').innerHTML = 'black';
-    // } else if (color[0] === 255 && color[1] === 0 && color[2] === 0) {
-    //   document.getElementById('test').innerHTML = 'red';
-    // } else if (color[0] === 255 && color[1] === 148 && color[2] === 0) {
-    //   document.getElementById('test').innerHTML = 'orange';
-    // } else {
-    //   document.getElementById('test').innerHTML = 'error';
-    // }
     points += score(color);
     document.getElementById('test').innerHTML = points.toString();
   }
