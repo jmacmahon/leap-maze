@@ -1,87 +1,76 @@
-import Color from 'color';
 import { fabric } from 'fabric';
 import { getXZ, loop } from './leapmotion';
+
+// points
+function score(color) {
+  const r = color[0];
+  const g = color[1];
+  const b = color[2];
+  if (r === 0 && g === 0 && b === 0) {
+    return 100;
+  }
+  if (r === 255 && g === 148 && b === 0) {
+    return 10;
+  }
+  if (r === 255 && g === 0 && b === 0) {
+    return -100;
+  }
+  return 0;
+}
 
 const SCALE = 2;
 
 const canvas = new fabric.Canvas('canvas').setDimensions({
-  width: 400 * SCALE,
-  height: 400 * SCALE,
+  width: 300 * SCALE,
+  height: 300 * SCALE,
 });
+
+const imgElement = document.getElementById('my-image');
+const img = new fabric.Image(imgElement, {
+  left: 0,
+  top: 0,
+  angle: 0,
+  opacity: 1,
+});
+canvas.add(img);
 
 const circ = new fabric.Circle({
-  left: (canvas.getWidth() / 2),
-  top: (canvas.getHeight() / 2),
-  fill: 'red',
+  left: (canvas.getWidth()),
+  top: (canvas.getHeight()),
+  fill: 'blue',
   radius: 5 * SCALE,
 });
+canvas.add(circ);
+circ.bringToFront();
 
-// let path;
-
-// fabric.loadSVGFromURL('/wires/wire1.svg', (objects, options) => {
-//   path = fabric.util.groupSVGElements(objects, options);
-//   path.scale(canvas.getHeight() / (path.getHeight() + 0.0));
-//   path.setLeft(
-//     (canvas.getWidth() / 2.0) - (path.getWidth() / 2.0)
-//   );
-//   canvas.add(path).renderAll();
-// });
-//
-// canvas.add(circ);
-// circ.bringToFront();
-
-// loop((frame) => {
-//   const xz = getXZ(frame);
-//   if (xz === null) {
-//     circ.visible = false;
-//   } else {
-//     circ.visible = true;
-//     circ.setLeft((canvas.getWidth() / 2) + (xz[0] * SCALE));
-//     circ.setTop((canvas.getHeight() / 2) + (xz[1] * SCALE));
-//     if (circ.intersectsWithObject(path)) {
-//       document.getElementById('test').innerHTML = 'intersects';
-//     } else {
-//       document.getElementById('test').innerHTML = 'not intersects';
-//     }
-//   }
-//   canvas.renderAll();
-// });
-
-let imD = new ImageData();
-let x = 0;
-let z = 0;
-const h = circ.getHeight();
-const w = circ.getWidth();
-
-const bg = document.getElementById('wireA.png');
-const wire = new fabric.Image(bg, { left: 0, top: 0, angle: 0, opacity: 1 });
-canvas.add(wire);
-const cxt = canvas.getContext('2d');
-
-const black = new Color().rbg(1, 1, 1);
-const red = new Color().rbg(255, 0, 0);
-const orange = new Color().rbg(255, 158, 0);
+const canvas2 = document.getElementById('canvas');
+const cxt = canvas2.getContext('2d');
+let points = 0;
 
 loop((frame) => {
+  circ.bringToFront();
   const xz = getXZ(frame);
-  x = xz[0];
-  z = xz[1];
-  imD = cxt.getImageData(x, z, w, h);
-  const onColor = new Color().rbg(imD.data[0], imD.data[1], imD.data[2]);
-  if (onColor.red() === black.red() &&
-  onColor.green() === black.green() &&
-  onColor.blue() === black.blue()) {
-    document.getElementById('test').innerHTML = 'good';
-  } else if (onColor.red() === red.red() &&
-  onColor.green() === red.green() &&
-  onColor.blue() === red.blue()) {
-    document.getElementById('test').innerHTML = 'bad';
-  } else if (onColor.red() === orange.red() &&
-  onColor.green() === orange.green() &&
-  onColor.blue() === orange.blue()) {
-    document.getElementById('test').innerHTML = 'okay';
-  } else {
-    document.getElementById('test').innerHTML = 'error';
+  if (xz !== null) {
+    const x = (canvas.getWidth() / 2) + (xz[0] * SCALE);
+    const z = (canvas.getHeight() / 2) + (xz[1] * SCALE);
+    circ.visible = true;
+    circ.setLeft(x);
+    circ.setTop(z);
+    const imD = cxt.getImageData(x - 10, z - 10, 1, 1);
+    const color = [imD.data[0], imD.data[1], imD.data[2]];
+    console.log(color);
+    console.log(z, x);
+    // if (color[0] === 0 && color[1] === 0 && color[2] === 0) {
+    //   document.getElementById('test').innerHTML = 'black';
+    // } else if (color[0] === 255 && color[1] === 0 && color[2] === 0) {
+    //   document.getElementById('test').innerHTML = 'red';
+    // } else if (color[0] === 255 && color[1] === 148 && color[2] === 0) {
+    //   document.getElementById('test').innerHTML = 'orange';
+    // } else {
+    //   document.getElementById('test').innerHTML = 'error';
+    // }
+    points += score(color);
+    document.getElementById('test').innerHTML = points.toString();
   }
   canvas.renderAll();
 });
